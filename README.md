@@ -61,6 +61,16 @@ The application displays USB devices in a tree view on the left. Click any devic
 - `Ctrl+Q` - Quit
 - `Ctrl+?` - Show shortcuts
 
+**Development/Testing without installation:**
+
+```bash
+# Setup development environment (compiles GSettings schema)
+./setup-dev.sh
+
+# Run directly from source tree
+./run-dev.py
+```
+
 ## Maintainers
 
 [@andypiper](https://github.com/andypiper)

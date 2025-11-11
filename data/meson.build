@@ -1,10 +1,6 @@
 # Desktop file
 desktop_file = i18n.merge_file(
-  input: configure_file(
-    input: 'com.github.andypiper.USBSplore.desktop.in',
-    output: '@BASENAME@',
-    configuration: configuration_data(),
-  ),
+  input: 'com.github.andypiper.USBSplore.desktop.in',
   output: 'com.github.andypiper.USBSplore.desktop',
   type: 'desktop',
   po_dir: '../po',
@@ -20,11 +16,7 @@ endif
 
 # AppStream metadata
 appstream_file = i18n.merge_file(
-  input: configure_file(
-    input: 'com.github.andypiper.USBSplore.appdata.xml.in',
-    output: '@BASENAME@',
-    configuration: configuration_data(),
-  ),
+  input: 'com.github.andypiper.USBSplore.appdata.xml.in',
   output: 'com.github.andypiper.USBSplore.appdata.xml',
   po_dir: '../po',
   install: true,

@@ -1,0 +1,24 @@
+# Build directories
+builddir/
+build/
+_build/
+
+# Compiled GSettings schema (for development)
+data/gschemas.compiled
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
