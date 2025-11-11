@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=USBSplore
+GenericName=USB Device Viewer
+Comment=View USB devices connected to your system
+Exec=usbsplore
+Icon=com.github.andypiper.USBSplore
+Terminal=false
+Type=Application
+Categories=GTK;System;HardwareSettings;
+Keywords=USB;devices;hardware;viewer;
+StartupNotify=true

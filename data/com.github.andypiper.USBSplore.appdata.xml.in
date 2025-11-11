@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.andypiper.USBSplore</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>USBSplore</name>
+  <summary>View USB devices connected to your system</summary>
+
+  <description>
+    <p>
+      USBSplore is a modern GNOME application for viewing USB devices connected
+      to your system. It displays the USB device hierarchy in an intuitive tree
+      view and shows detailed information about each device.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>View all USB devices in a hierarchical tree structure</li>
+      <li>See detailed device information including vendor, product, and serial numbers</li>
+      <li>Display connection details like bus number, speed, and power consumption</li>
+      <li>Modern interface following GNOME Human Interface Guidelines</li>
+      <li>Built with GTK 4 and libadwaita for seamless GNOME integration</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">com.github.andypiper.USBSplore.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main window showing USB device tree and details</caption>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://github.com/andypiper/usbsplore</url>
+  <url type="bugtracker">https://github.com/andypiper/usbsplore/issues</url>
+
+  <developer_name>Andy Piper</developer_name>
+
+  <releases>
+    <release version="1.0.0" date="2025-11-11">
+      <description>
+        <p>Initial release of USBSplore</p>
+        <ul>
+          <li>USB device tree visualization</li>
+          <li>Detailed device information panel</li>
+          <li>Modern GNOME interface with Adwaita</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1" />
+
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </recommends>
+
+  <provides>
+    <binary>usbsplore</binary>
+  </provides>
+</component>

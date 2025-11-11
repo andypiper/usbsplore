@@ -1,0 +1,4 @@
+data/com.github.andypiper.USBSplore.desktop.in
+data/com.github.andypiper.USBSplore.appdata.xml.in
+src/main.py
+src/window.py
