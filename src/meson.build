@@ -2,10 +2,10 @@ moduledir = pkgdatadir / 'usbsplore'
 
 # Install Python modules
 python_sources = [
-  '__init__.py',
-  'main.py',
-  'window.py',
-  'usb_device.py',
+  'usbsplore/__init__.py',
+  'usbsplore/main.py',
+  'usbsplore/window.py',
+  'usbsplore/usb_device.py',
 ]
 
 install_data(python_sources, install_dir: moduledir)
