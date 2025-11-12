@@ -61,6 +61,24 @@ class USBDevice:
             if value:
                 self._properties[attr] = value
 
+        # Load driver/module information
+        self._load_driver_info()
+
+    def _load_driver_info(self):
+        """Load kernel driver and module information."""
+        # Check for driver symlink
+        driver_path = self.sysfs_path / 'driver'
+        if driver_path.exists() and driver_path.is_symlink():
+            # Get driver name from symlink target
+            driver_name = driver_path.resolve().name
+            self._properties['driver'] = driver_name
+
+            # Try to get module name
+            module_path = driver_path / 'module'
+            if module_path.exists() and module_path.is_symlink():
+                module_name = module_path.resolve().name
+                self._properties['module'] = module_name
+
     def add_child(self, device: 'USBDevice'):
         """Add a child device to this device."""
         self.children.append(device)
@@ -119,6 +137,16 @@ class USBDevice:
     def version(self) -> Optional[str]:
         """Get USB version."""
         return self._properties.get('version')
+
+    @property
+    def driver(self) -> Optional[str]:
+        """Get kernel driver name."""
+        return self._properties.get('driver')
+
+    @property
+    def module(self) -> Optional[str]:
+        """Get kernel module name."""
+        return self._properties.get('module')
 
     def get_display_name(self) -> str:
         """Get a human-readable display name for the device."""

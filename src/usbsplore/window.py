@@ -10,10 +10,16 @@ from .usb_device import USBDevice, USBDeviceTree
   <template class="USBSploreWindow" parent="AdwApplicationWindow">
     <property name="default-width">900</property>
     <property name="default-height">600</property>
+    <property name="title">USBSplore</property>
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <property name="title">USBSplore</property>
+              </object>
+            </property>
             <child type="end">
               <object class="GtkMenuButton" id="menu_button">
                 <property name="icon-name">open-menu-symbolic</property>
@@ -29,39 +35,65 @@ from .usb_device import USBDevice, USBDeviceTree
           </object>
         </child>
         <property name="content">
-          <object class="GtkPaned" id="main_paned">
-            <property name="orientation">horizontal</property>
-            <property name="shrink-start-child">false</property>
-            <property name="shrink-end-child">true</property>
-            <property name="resize-start-child">false</property>
-            <property name="resize-end-child">true</property>
-            <property name="position">300</property>
-            <property name="start-child">
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">automatic</property>
-                <property name="vscrollbar-policy">automatic</property>
+          <object class="AdwNavigationSplitView" id="split_view">
+            <property name="sidebar-width-fraction">0.33</property>
+            <property name="min-sidebar-width">280</property>
+            <property name="max-sidebar-width">400</property>
+            <property name="sidebar">
+              <object class="AdwNavigationPage">
+                <property name="title">USB Devices</property>
                 <property name="child">
-                  <object class="GtkTreeView" id="device_tree">
-                    <property name="headers-visible">false</property>
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <property name="show-title">false</property>
+                      </object>
+                    </child>
+                    <property name="content">
+                      <object class="GtkScrolledWindow">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="child">
+                          <object class="GtkTreeView" id="device_tree">
+                            <property name="headers-visible">false</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
                   </object>
                 </property>
               </object>
             </property>
-            <property name="end-child">
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">automatic</property>
-                <property name="vscrollbar-policy">automatic</property>
+            <property name="content">
+              <object class="AdwNavigationPage">
+                <property name="title">Device Details</property>
                 <property name="child">
-                  <object class="AdwClamp">
-                    <property name="maximum-size">800</property>
-                    <property name="child">
-                      <object class="GtkBox" id="details_box">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">12</property>
-                        <property name="margin-top">24</property>
-                        <property name="margin-bottom">24</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">12</property>
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <property name="show-title">false</property>
+                      </object>
+                    </child>
+                    <property name="content">
+                      <object class="GtkScrolledWindow">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="child">
+                          <object class="AdwClamp">
+                            <property name="maximum-size">700</property>
+                            <property name="tightening-threshold">600</property>
+                            <property name="child">
+                              <object class="GtkBox" id="details_box">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">24</property>
+                                <property name="margin-top">24</property>
+                                <property name="margin-bottom">24</property>
+                                <property name="margin-start">24</property>
+                                <property name="margin-end">24</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
                       </object>
                     </property>
                   </object>
@@ -85,6 +117,38 @@ from .usb_device import USBDevice, USBDeviceTree
       </item>
     </section>
   </menu>
+  <object class="GtkShortcutsWindow" id="shortcuts_window">
+    <property name="modal">true</property>
+    <child>
+      <object class="GtkShortcutsSection">
+        <property name="section-name">shortcuts</property>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes">General</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Show Keyboard Shortcuts</property>
+                <property name="accelerator">&lt;Primary&gt;question</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Refresh Device List</property>
+                <property name="accelerator">&lt;Primary&gt;r</property>
+                <property name="action-name">win.refresh</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Quit</property>
+                <property name="accelerator">&lt;Primary&gt;q</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
 ''')
 class USBSploreWindow(Adw.ApplicationWindow):
@@ -95,7 +159,7 @@ class USBSploreWindow(Adw.ApplicationWindow):
     device_tree = Gtk.Template.Child()
     details_box = Gtk.Template.Child()
     refresh_button = Gtk.Template.Child()
-    main_paned = Gtk.Template.Child()
+    split_view = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         """Initialize the main window."""
@@ -107,11 +171,26 @@ class USBSploreWindow(Adw.ApplicationWindow):
         # Set up tree view
         self._setup_tree_view()
 
+        # Set up actions
+        self._setup_actions()
+
         # Connect signals
         self.refresh_button.connect('clicked', self._on_refresh_clicked)
 
         # Load devices
         self._load_devices()
+
+    def _setup_actions(self):
+        """Set up window actions and keyboard shortcuts."""
+        # Refresh action
+        refresh_action = Gio.SimpleAction.new('refresh', None)
+        refresh_action.connect('activate', self._on_refresh_action)
+        self.add_action(refresh_action)
+
+        # Set up keyboard shortcuts
+        app = self.get_application()
+        if app:
+            app.set_accels_for_action('win.refresh', ['<Primary>r'])
 
     def _setup_tree_view(self):
         """Set up the tree view for USB devices."""
@@ -141,7 +220,7 @@ class USBSploreWindow(Adw.ApplicationWindow):
     def _load_devices(self):
         """Load USB devices into the tree view."""
         self.tree_store.clear()
-        root_devices = self.usb_tree.scan()
+        root_devices = self.usb_tree.refresh()
 
         for device in root_devices:
             self._add_device_to_tree(device, None)
@@ -230,8 +309,8 @@ class USBSploreWindow(Adw.ApplicationWindow):
         Args:
             device: USB device to show details for
         """
-        # Clear existing details
-        self._clear_details()
+        # Clear existing details without showing placeholder
+        self._clear_details_content()
 
         # Create header
         header = Adw.PreferencesGroup()
@@ -244,37 +323,53 @@ class USBSploreWindow(Adw.ApplicationWindow):
 
         # Basic information
         basic_group = Adw.PreferencesGroup()
-        basic_group.set_title('Basic Information')
+        basic_group.set_title('Basic information')
         self.details_box.append(basic_group)
 
         # Add property rows
         properties = [
-            ('Vendor ID', device.vendor_id),
-            ('Product ID', device.product_id),
-            ('Manufacturer', device.manufacturer),
+            ('Vendor ID', device.vendor_id, True),
+            ('Product ID', device.product_id, True),
+            ('Manufacturer', device.manufacturer, False),
             ('Product', device.product),
-            ('Serial Number', device.serial),
+            ('Serial number', device.serial, True),
         ]
 
-        for title, value in properties:
+        for prop_info in properties:
+            title = prop_info[0]
+            value = prop_info[1]
+            copyable = prop_info[2] if len(prop_info) > 2 else False
+
             if value:
                 row = Adw.ActionRow()
                 row.set_title(title)
                 row.set_subtitle(value)
+                row.set_subtitle_selectable(True)
+
+                # Add copy button for copyable values
+                if copyable:
+                    copy_button = Gtk.Button()
+                    copy_button.set_icon_name('edit-copy-symbolic')
+                    copy_button.set_valign(Gtk.Align.CENTER)
+                    copy_button.add_css_class('flat')
+                    copy_button.set_tooltip_text(f'Copy {title}')
+                    copy_button.connect('clicked', lambda b, v=value: self._copy_to_clipboard(v))
+                    row.add_suffix(copy_button)
+
                 basic_group.add(row)
 
         # Connection information
         conn_group = Adw.PreferencesGroup()
-        conn_group.set_title('Connection Information')
+        conn_group.set_title('Connection information')
         self.details_box.append(conn_group)
 
         connection_props = [
-            ('Bus Number', device.bus_number),
-            ('Device Number', device.device_number),
+            ('Bus number', device.bus_number),
+            ('Device number', device.device_number),
             ('Speed', device.speed),
-            ('USB Version', device.version),
-            ('Device Class', device.device_class),
-            ('Max Power', device.max_power),
+            ('USB version', device.version),
+            ('Device class', device.device_class),
+            ('Maximum power', device.max_power),
         ]
 
         for title, value in connection_props:
@@ -282,7 +377,37 @@ class USBSploreWindow(Adw.ApplicationWindow):
                 row = Adw.ActionRow()
                 row.set_title(title)
                 row.set_subtitle(value)
+                row.set_subtitle_selectable(True)
                 conn_group.add(row)
+
+        # Driver/Module information
+        if device.driver or device.module:
+            driver_group = Adw.PreferencesGroup()
+            driver_group.set_title('Driver information')
+            self.details_box.append(driver_group)
+
+            driver_props = [
+                ('Kernel driver', device.driver),
+                ('Kernel module', device.module),
+            ]
+
+            for title, value in driver_props:
+                if value:
+                    row = Adw.ActionRow()
+                    row.set_title(title)
+                    row.set_subtitle(value)
+                    row.set_subtitle_selectable(True)
+
+                    # Add copy button
+                    copy_button = Gtk.Button()
+                    copy_button.set_icon_name('edit-copy-symbolic')
+                    copy_button.set_valign(Gtk.Align.CENTER)
+                    copy_button.add_css_class('flat')
+                    copy_button.set_tooltip_text(f'Copy {title}')
+                    copy_button.connect('clicked', lambda b, v=value: self._copy_to_clipboard(v))
+                    row.add_suffix(copy_button)
+
+                    driver_group.add(row)
 
         # Additional properties
         all_props = device.get_all_properties()
@@ -290,23 +415,25 @@ class USBSploreWindow(Adw.ApplicationWindow):
             # Find properties not already shown
             shown_keys = {
                 'idVendor', 'idProduct', 'manufacturer', 'product', 'serial',
-                'busnum', 'devnum', 'speed', 'version', 'bDeviceClass', 'bMaxPower'
+                'busnum', 'devnum', 'speed', 'version', 'bDeviceClass', 'bMaxPower',
+                'driver', 'module'
             }
             additional_props = {k: v for k, v in all_props.items() if k not in shown_keys}
 
             if additional_props:
                 extra_group = Adw.PreferencesGroup()
-                extra_group.set_title('Additional Properties')
+                extra_group.set_title('Additional properties')
                 self.details_box.append(extra_group)
 
                 for key, value in sorted(additional_props.items()):
                     row = Adw.ActionRow()
                     row.set_title(key)
                     row.set_subtitle(value)
+                    row.set_subtitle_selectable(True)
                     extra_group.add(row)
 
-    def _clear_details(self):
-        """Clear the details panel."""
+    def _clear_details_content(self):
+        """Clear the details panel content."""
         # Remove all children
         while True:
             child = self.details_box.get_first_child()
@@ -314,10 +441,14 @@ class USBSploreWindow(Adw.ApplicationWindow):
                 break
             self.details_box.remove(child)
 
+    def _clear_details(self):
+        """Clear the details panel and show placeholder."""
+        self._clear_details_content()
+
         # Add placeholder
         status_page = Adw.StatusPage()
         status_page.set_icon_name('drive-removable-media-symbolic')
-        status_page.set_title('No Device Selected')
+        status_page.set_title('No device selected')
         status_page.set_description('Select a USB device from the list to view its details')
         self.details_box.append(status_page)
 
@@ -327,5 +458,27 @@ class USBSploreWindow(Adw.ApplicationWindow):
         Args:
             button: Refresh button
         """
+        self._do_refresh()
+
+    def _on_refresh_action(self, action: Gio.SimpleAction, param):
+        """Handle refresh action (keyboard shortcut).
+
+        Args:
+            action: The action
+            param: Action parameters
+        """
+        self._do_refresh()
+
+    def _do_refresh(self):
+        """Perform device list refresh."""
         self._load_devices()
         self._clear_details()
+
+    def _copy_to_clipboard(self, text: str):
+        """Copy text to clipboard.
+
+        Args:
+            text: Text to copy
+        """
+        clipboard = self.get_clipboard()
+        clipboard.set(text)

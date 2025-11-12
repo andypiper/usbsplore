@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- Symbolic USB icon for use in GNOME Shell -->
+  <path d="M 8 2 L 8 12 M 8 4 L 6 2.5 M 8 4 L 10 2.5 M 6 2.5 A 0.5 0.5 0 1 1 6 2.51 M 10 2.5 L 10 3.5 L 11 3.5 L 11 2.5 Z M 8 12 L 6.5 10.5 L 9.5 10.5 Z M 7 13 L 9 13 L 9 14 L 7 14 Z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>

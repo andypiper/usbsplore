@@ -42,3 +42,14 @@ if compile_schemas.found()
     args: ['--strict', '--dry-run', meson.current_source_dir()]
   )
 endif
+
+# Application icons
+install_data(
+  'icons/hicolor/scalable/apps/com.github.andypiper.USBSplore.svg',
+  install_dir: datadir / 'icons/hicolor/scalable/apps'
+)
+
+install_data(
+  'icons/hicolor/symbolic/apps/com.github.andypiper.USBSplore-symbolic.svg',
+  install_dir: datadir / 'icons/hicolor/symbolic/apps'
+)
